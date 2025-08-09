@@ -1,4 +1,4 @@
-using ECommerceStore.Data;
+﻿using ECommerceStore.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -45,6 +45,8 @@ builder.Services.AddAuthentication(options =>
        };
    });
 
+
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
@@ -73,6 +75,18 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+
 
 var app = builder.Build();
 
@@ -88,7 +102,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); // 
+app.UseAuthentication(); 
+
+app.UseStaticFiles(); // ✅ Enable wwwroot for serving images
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 

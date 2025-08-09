@@ -20,11 +20,41 @@ namespace ECommerceStore.Controllers
 
         //GET : /api/product
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] ProductQueryParameters query)
         {
-            var products = await _context.Products.ToListAsync();
+            var productsQuery = _context.Products.AsQueryable();
+
+            // 🔍 Search
+            if (!string.IsNullOrEmpty(query.Search))
+            {
+                productsQuery = productsQuery.Where(p =>
+                    p.Name.Contains(query.Search) ||
+                    p.Description.Contains(query.Search));
+            }
+
+            // 📂 Category Filter
+            if (query.CategoryId.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.CategoryId == query.CategoryId.Value);
+            }
+
+            // 🧮 Total count before pagination
+            var totalCount = await productsQuery.CountAsync();
+
+            // 📄 Pagination
+            var products = await productsQuery
+                .Skip((query.Page - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
+
+            // 📨 Return response with pagination metadata in header
+            Response.Headers.Append("X-Total-Count", totalCount.ToString());
+
+
             return Ok(products);
         }
+
+        
 
         //GET : /api/product/{id}
 
@@ -87,5 +117,41 @@ namespace ECommerceStore.Controllers
             await _context.SaveChangesAsync();
             return Ok("Deleted successfully");
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("upload-image")]
+        public async Task<IActionResult> UploadProductImage([FromForm] ProductImageUploadDTO dto)
+        {
+            var product = await _context.Products.FindAsync(dto.ProductId);
+            if (product == null)
+                return NotFound("Product not found.");
+
+            if (dto.Image == null || dto.Image.Length == 0)
+                return BadRequest("No image uploaded.");
+
+            // 📁 Ensure the images folder exists
+            var imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            if (!Directory.Exists(imageFolder))
+                Directory.CreateDirectory(imageFolder);
+
+            // 📝 Create unique file name
+            var fileName = $"{Guid.NewGuid()}_{dto.Image.FileName}";
+            var filePath = Path.Combine(imageFolder, fileName);
+
+            // 💾 Save the file to wwwroot/images
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await dto.Image.CopyToAsync(stream);
+            }
+
+            // 🌍 Build the public URL
+            var imageUrl = $"/images/{fileName}";
+            product.ImageUrl = imageUrl;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { imageUrl });
+        }
+
     }
 }

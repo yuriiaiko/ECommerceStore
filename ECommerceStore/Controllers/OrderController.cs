@@ -14,9 +14,12 @@ namespace ECommerceStore.Controllers
     {
         private readonly AppDbContext _context;
 
+        
+
         public OrderController(AppDbContext context)
         {
             _context = context;
+            
         }
 
         // POST: api/Order
@@ -42,6 +45,7 @@ namespace ECommerceStore.Controllers
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
+            
 
             return Ok(order);
         }
@@ -109,6 +113,35 @@ namespace ECommerceStore.Controllers
                 return NotFound();
 
             return Ok(order);
+        }
+
+        [Authorize(Roles ="User")]
+        [HttpPost("pay")]
+        public async Task<IActionResult> Pay([FromBody] PaymentRequestDto dto)
+        {
+            var userIdClaim = User.FindFirst("id");
+
+            if (userIdClaim == null)
+                return Unauthorized("User ID claim not found.");
+
+            int userId = int.Parse(userIdClaim.Value);
+
+
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == dto.OrderId && o.UserId == userId);
+
+            if (order == null)
+                return NotFound("Order not found.");
+
+            if (order.isPaid)
+                return BadRequest("Order is already paid.");
+
+            order.isPaid = true;
+            order.PaymentDate = DateTime.UtcNow;
+            order.Status = "Paid";
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Payment successful.");
         }
     }
 }

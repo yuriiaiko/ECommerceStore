@@ -11,7 +11,10 @@
         public List<OrderItem> OrderItems { get; set; } = new();
         public User User { get; set; } = null!;
 
+        // Payment related fields 
+        public bool isPaid { get; set; } = false;
+        public  DateTime PaymentDate { get; set; }
 
-
+        public string Status { get; set; } = "Pending";
     }
 }

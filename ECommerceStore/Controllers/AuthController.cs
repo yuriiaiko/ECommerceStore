@@ -20,11 +20,14 @@ namespace ECommerceStore.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
+
         public AuthController(AppDbContext context,
-                              IConfiguration config)
+                              IConfiguration config
+            )
         {
             _context = context;
             _configuration = config;
+            
         }
 
         [HttpPost("register")]
@@ -55,6 +58,8 @@ namespace ECommerceStore.Controllers
             // Add the user o the database
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+            
+
             return Ok("User registered successfully");
         }
 
@@ -71,9 +76,11 @@ namespace ECommerceStore.Controllers
 
             // Generate the token
             var token = GenerateJwtToken(user);
+            
 
             // Return the token in the response
             return Ok(new { token });
+
 
 
         }
@@ -85,7 +92,7 @@ namespace ECommerceStore.Controllers
 
             var claims = new[]
             {
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim("id", user.Id.ToString()),
         new Claim(ClaimTypes.Email, user.Email),
         new Claim(ClaimTypes.Role, user.Role),
     };

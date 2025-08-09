@@ -171,3 +171,5 @@ C:\Users\User\Desktop\Projet C#\ECommerceStore\ECommerceStore\obj\Debug\net8.0\E
 C:\Users\User\Desktop\Projet C#\ECommerceStore\ECommerceStore\obj\Debug\net8.0\ECommerceStore.genruntimeconfig.cache
 C:\Users\User\Desktop\Projet C#\ECommerceStore\ECommerceStore\obj\Debug\net8.0\ref\ECommerceStore.dll
 C:\Users\User\Desktop\Projet C#\ECommerceStore\ECommerceStore\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\User\Desktop\Projet C#\ECommerceStore\ECommerceStore\obj\Debug\net8.0\ECommerceStore.sourcelink.json
+C:\Users\User\Desktop\Projet C#\ECommerceStore\ECommerceStore\bin\Debug\net8.0\ECommerceStore.staticwebassets.runtime.json

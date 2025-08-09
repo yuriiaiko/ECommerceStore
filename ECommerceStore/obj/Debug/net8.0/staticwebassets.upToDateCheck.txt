@@ -1,0 +1,8 @@
+wwwroot\images\body-lotion.jpeg
+wwwroot\images\body-mist.jpeg
+wwwroot\images\blossom.jpeg
+wwwroot\images\body-scrub.jpeg
+wwwroot\images\champoo.jpeg
+wwwroot\images\cream.jpeg
+wwwroot\images\deep-conditionner.jpeg
+wwwroot\images\vitamin-c.jpeg

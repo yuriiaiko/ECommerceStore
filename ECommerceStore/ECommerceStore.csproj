@@ -1,10 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\images\Catrice HD Liquid Coverage Foundation _ Review, Swatches and Before_After.jpeg" />
+    <Content Remove="wwwroot\images\DIVE-IN Low Molecular Hyaluronic Acid Soothing Cream _ Soko Glam.jpeg" />
+    <Content Remove="wwwroot\images\eos Shea Better Body Lotion.jpeg" />
+    <Content Remove="wwwroot\images\foundation.jpeg" />
+    <Content Remove="wwwroot\images\Hair Mist.jpeg" />
+    <Content Remove="wwwroot\images\MAC.jpeg" />
+    <Content Remove="wwwroot\images\OGX Argan Oil of Morocco Review - Payton lee.jpeg" />
+    <Content Remove="wwwroot\images\téléchargement %283%29.jpeg" />
+    <Content Remove="wwwroot\images\téléchargement %284%29.jpeg" />
+    <Content Remove="wwwroot\images\téléchargement %285%29.jpeg" />
+    <Content Remove="wwwroot\images\Vitamine C.jpeg" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
